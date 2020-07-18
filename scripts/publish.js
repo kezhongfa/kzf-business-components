@@ -7,7 +7,7 @@ const { version, tag = "latest" } = argv;
 if (version) {
   shell.exec(`npm version ${version} -m "chore: version %s"`);
   shell.rm("-rf", "dist");
-  shell.cp("-r", "src", "dist");
+  shell.exec("npm run build");
   shell.cp("package.json", "dist");
   shell.cp("README.md", "dist");
   shell.exec("npm config get registry", (_, stdout) => {
