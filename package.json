@@ -57,6 +57,8 @@
   "devDependencies": {
     "@commitlint/cli": "^9.1.1",
     "@commitlint/config-conventional": "^9.1.1",
+    "@shuyun-ep-team/kylin-ui": "^0.2.5",
+    "@shuyun-ep-team/utils": "^1.8.0",
     "@storybook/addon-a11y": "^5.3.19",
     "@storybook/addon-actions": "^5.3.19",
     "@storybook/addon-docs": "^5.3.19",
@@ -75,6 +77,7 @@
     "husky": "^4.2.5",
     "minimist": "^1.2.5",
     "react-docgen-typescript-loader": "^3.7.2",
+    "react-jss": "^10.3.0",
     "rimraf": "^3.0.2",
     "shelljs": "^0.8.4",
     "storybook-addon-smart-knobs": "^6.0.2",

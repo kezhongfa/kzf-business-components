@@ -1,9 +1,10 @@
 import React from "react";
 import { addDecorator, addParameters, configure } from "@storybook/react";
 // import { withInfo } from "@storybook/addon-info";
+import "@shuyun-ep-team/kylin-ui/es/styles/index.css";
 
 const wrapperStyle: React.CSSProperties = {
-  padding: "20px 40px",
+  padding: "20px",
 };
 
 const storyWrapper = (stroyFn: any) => (
@@ -36,5 +37,5 @@ const loaderFn = () => {
   return allExports;
 };
 
-// automatically import all files ending in *.stories.js
+// automatically import all files ending in *.stories.(js|jsx|ts|tsx)
 configure(loaderFn, module);
