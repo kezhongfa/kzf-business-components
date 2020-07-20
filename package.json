@@ -21,7 +21,7 @@
     "clean": "rimraf ./dist",
     "check-nodeJs-version": "node ./scripts/checkNodeJsVersion.js",
     "checkDependencies": "node ./scripts/checkDependencies.js",
-    "lint": "eslint --ext js,ts,tsx src --max-warnings 0",
+    "lint": "eslint --ext js,jsx,ts,tsx src --max-warnings 0 --fix",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "prestorybook": "npm run prestart",
@@ -31,15 +31,14 @@
     "start": "react-scripts start",
     "build-debug": "node scripts/debug-info.js",
     "build-ts": "tsc -p tsconfig.build.json",
-    "build": "npm run clean && npm run build-ts & npm run build-debug"
+    "build": "npm run clean && npm run build-ts & npm run build-debug",
+    "prepublishOnly": "npm run lint"
   },
   "husky": {
     "hooks": {
+      "pre-commit": "npm run lint",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
-  },
-  "eslintConfig": {
-    "extends": "react-app"
   },
   "browserslist": {
     "production": [
@@ -74,6 +73,7 @@
   "devDependencies": {
     "@commitlint/cli": "^9.1.1",
     "@commitlint/config-conventional": "^9.1.1",
+    "@shuyun-ep-team/eslint-config": "^1.1.9",
     "@storybook/addon-a11y": "^5.3.19",
     "@storybook/addon-actions": "^5.3.19",
     "@storybook/addon-docs": "^5.3.19",

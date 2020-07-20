@@ -76,18 +76,13 @@ export const MultipleEnterInputSelect = (props: IProps) => {
         }
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [curValue]
   );
 
-  const handleChange = useCallback(
-    (value: tValue) => {
-      const { onChange } = props;
-      onChange && onChange(value);
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
+  const handleChange = useCallback((value: tValue) => {
+    const { onChange } = props;
+    onChange && onChange(value);
+  }, []);
 
   const options = useMemo(() => {
     return curValue.map((d) => <Option key={d}>{d}</Option>);

@@ -3,6 +3,7 @@ import {
   antPrefix,
   primaryColor,
 } from "@shuyun-ep-team/kylin-ui/es/styles/vars";
+
 export const select: ICSSProperties = {
   [`& .${antPrefix}-select-selection--multiple`]: {
     overflow: "hidden",
