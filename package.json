@@ -22,7 +22,7 @@
     "check-nodeJs-version": "node ./scripts/checkNodeJsVersion.js",
     "checkDependencies": "node ./scripts/checkDependencies.js",
     "precodecheck": "tsc --noEmit",
-    "codecheck": "eslint -c .eslintrc.json \"src/**/*.{js,jsx,ts,tsx}\" --max-warnings 0",
+    "codecheck": "eslint -c .eslintrc.json \"src/**/*.{js,jsx,ts,tsx}\" --max-warnings 0 --fix",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "prestorybook": "npm run prestart",
