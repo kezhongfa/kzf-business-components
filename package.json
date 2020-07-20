@@ -22,7 +22,7 @@
     "check-nodeJs-version": "node ./scripts/checkNodeJsVersion.js",
     "checkDependencies": "node ./scripts/checkDependencies.js",
     "precodecheck": "tsc --noEmit",
-    "codecheck": "eslint -c .eslintrc.json \"src/**/*.{js,jsx,ts,tsx}\" --max-warnings 0 --fix",
+    "codecheck": "eslint -c .eslintrc.json \"src/**/*.{js,jsx,ts,tsx}\" --fix --max-warnings 0",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "prestorybook": "npm run prestart",
@@ -32,19 +32,18 @@
     "start": "react-scripts start",
     "build-debug": "node scripts/debug-info.js",
     "build-ts": "tsc -p tsconfig.build.json",
-    "build": "npm run clean && npm run build-ts & npm run build-debug",
-    "prepublishOnly": "npm run lint"
+    "build": "npm run clean && npm run codecheck && npm run build-ts & npm run build-debug"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "echo '执行代码检测' && lint-staged",
-      "commit-msg": "echo '执行git提交信息格式检测' cross-env-shell \"commitlint -e $HUSKY_GIT_PARAMS\""
+      "pre-commit": "echo '执行代码检测:' && lint-staged",
+      "commit-msg": "echo '执行git提交信息格式检测:' && commitlint -E HUSKY_GIT_PARAMS"
     }
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
+    "src/**/*.{js,jsx,ts,tsx}": [
       "npm run codecheck",
-      "git add"
+      "git add ."
     ]
   },
   "browserslist": {
@@ -105,6 +104,7 @@
     "husky": "^4.2.5",
     "lint-staged": "^10.2.11",
     "minimist": "^1.2.5",
+    "prettier": "^2.0.5",
     "react-docgen-typescript-loader": "^3.7.2",
     "react-scripts": "^3.4.1",
     "rimraf": "^3.0.2",
