@@ -21,7 +21,8 @@
     "clean": "rimraf ./dist",
     "check-nodeJs-version": "node ./scripts/checkNodeJsVersion.js",
     "checkDependencies": "node ./scripts/checkDependencies.js",
-    "lint": "eslint --ext js,jsx,ts,tsx src --max-warnings 0 --fix",
+    "precodecheck": "tsc --noEmit",
+    "codecheck": "eslint -c .eslintrc.json \"src/**/*.{js,jsx,ts,tsx}\" --max-warnings 0",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "prestorybook": "npm run prestart",
@@ -36,9 +37,15 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint",
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+      "pre-commit": "echo '执行代码检测' && lint-staged",
+      "commit-msg": "echo '执行git提交信息格式检测' cross-env-shell \"commitlint -e $HUSKY_GIT_PARAMS\""
     }
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "npm run codecheck",
+      "git add"
+    ]
   },
   "browserslist": {
     "production": [
@@ -96,6 +103,7 @@
     "@types/storybook__addon-info": "^5.2.1",
     "colors": "^1.4.0",
     "husky": "^4.2.5",
+    "lint-staged": "^10.2.11",
     "minimist": "^1.2.5",
     "react-docgen-typescript-loader": "^3.7.2",
     "react-scripts": "^3.4.1",
