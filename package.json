@@ -22,7 +22,7 @@
     "check-nodeJs-version": "node ./scripts/checkNodeJsVersion.js",
     "checkDependencies": "node ./scripts/checkDependencies.js",
     "precodecheck": "tsc --noEmit",
-    "codecheck": "eslint -c .eslintrc.json \"src/**/*.{js,jsx,ts,tsx}\" --fix --max-warnings 0",
+    "codecheck": "eslint -c .eslintrc.json \"src/**/*.{js,jsx,ts,tsx}\" --fix",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "prestorybook": "npm run prestart",
@@ -32,7 +32,8 @@
     "start": "react-scripts start",
     "build-debug": "node scripts/debug-info.js",
     "build-ts": "tsc -p tsconfig.build.json",
-    "build": "npm run clean && npm run codecheck && npm run build-ts & npm run build-debug"
+    "build": "npm run clean && npm run codecheck && npm run build-ts && npm run build-debug",
+    "prettier": "npx prettier --write src/**/*"
   },
   "husky": {
     "hooks": {

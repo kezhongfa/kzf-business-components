@@ -1,4 +1,5 @@
 {
   "MultipleEnterInputSelect.Placeholder": "Enter keywords. Enter to split",
-  "MultipleEnterInputSelect.Message.Error.Duplicate": "There are duplicates"
+  "MultipleEnterInputSelect.Message.Error.Duplicate": "There are duplicates",
+  "MultipleEnterInputSelect.Message.Error.EnterNumber": "must enter a number"
 }

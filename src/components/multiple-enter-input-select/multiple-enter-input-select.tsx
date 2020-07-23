@@ -1,23 +1,27 @@
-import React, {
-  useCallback,
-  useRef,
-  useMemo,
-  useState,
-  useEffect,
-} from "react";
+import React, { useCallback, useRef, useMemo, useState, useEffect } from "react";
 import { createUseStyles } from "react-jss";
 import { message, Popover } from "@shuyun-ep-team/kylin-ui";
 import Select, { ISelectProps } from "@shuyun-ep-team/kylin-ui/es/select";
 import Close from "@shuyun-ep-team/icons/react/Close";
+import { isString } from "@shuyun-ep-team/utils/es/type";
+import { isNumeric } from "../../helpers";
+import { translate } from "../../helpers/translate";
+import { TLanguage } from "../../types/language";
+import { languageJson } from "../../constants/language";
 import * as styles from "./index.jss";
+import { getCurLanguage } from "./i18n";
 
 const { Option } = Select;
-
+const { zhCN } = languageJson;
 const useStyles = createUseStyles(styles);
 
-type tValue = string[];
+export type tValue = Array<string | number>;
+export type tValueType = "string" | "number";
 export interface IProps extends Omit<ISelectProps, "onChange"> {
-  language?: string;
+  /**设置组件使用语言 */
+  language?: TLanguage;
+  valueType?: tValueType;
+  validator?: (value: string | number, callback: (msg?: string) => void) => void;
   onChange?: (v: tValue) => void;
   zIndex?: number;
 }
@@ -38,15 +42,19 @@ export const MultipleEnterInputSelect = (props: IProps) => {
     placeholder,
     zIndex = zIndexDefault,
     value,
+    valueType = "string",
+    validator,
     onInputKeyDown,
     onMouseEnter,
     onMouseLeave,
     onFocus,
     onBlur,
+    language,
     ...restProps
   } = props;
   const styles = useStyles();
   const selectRef = useRef<HTMLSelectElement>();
+  const i18n = useMemo(() => getCurLanguage(language), [language]);
   const [popoverVisible, setPopoverVisible] = useState(false);
 
   const curValue = useMemo(() => {
@@ -62,27 +70,58 @@ export const MultipleEnterInputSelect = (props: IProps) => {
   const onCurrentInputKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLInputElement>) => {
       if (e.keyCode === 13) {
-        const value = (e.target as HTMLInputElement).value;
-        if (value) {
-          if (curValue.includes(value)) {
-            message.error("有重复项");
+        let val: string | number = (e.target as HTMLInputElement).value;
+        if (val) {
+          if (valueType === "number") {
+            if (!isNumeric(val) || val.includes("+")) {
+              message.error(translate(i18n, "MultipleEnterInputSelect.Message.Error.EnterNumber"));
+              return;
+            }
+            val = Number(val);
+          }
+          if (curValue.includes(val)) {
+            message.error(translate(i18n, "MultipleEnterInputSelect.Message.Error.Duplicate"));
             return;
           }
-          handleChange([...curValue, value]);
-          selectRef.current?.blur();
-          setTimeout(() => {
-            selectRef.current?.focus();
-          }, timeoutDefault);
+
+          if (validator) {
+            validator(val, (msg?: string) => {
+              if (msg) {
+                message.error(msg);
+              } else {
+                handleChange([...curValue, val]);
+                selectRef.current?.blur();
+                setTimeout(() => {
+                  selectRef.current?.focus();
+                }, timeoutDefault);
+              }
+            });
+          } else {
+            handleChange([...curValue, val]);
+            selectRef.current?.blur();
+            setTimeout(() => {
+              selectRef.current?.focus();
+            }, timeoutDefault);
+          }
         }
       }
     },
-    [curValue]
+    [curValue, validator, valueType]
   );
 
-  const handleChange = useCallback((value: tValue) => {
-    const { onChange } = props;
-    onChange && onChange(value);
-  }, []);
+  const handleChange = useCallback(
+    (v: tValue) => {
+      const { onChange } = props;
+      if (onChange) {
+        let values = v || [];
+        if (valueType === "number") {
+          values = values.filter((item: string | number) => !isString(item));
+        }
+        onChange(values);
+      }
+    },
+    [props?.onChange]
+  );
 
   const options = useMemo(() => {
     return curValue.map((d) => <Option key={d}>{d}</Option>);
@@ -96,23 +135,22 @@ export const MultipleEnterInputSelect = (props: IProps) => {
     <Popover
       content={popoverContent}
       visible={popoverVisible}
-      getPopupContainer={(triggerNode: HTMLElement) =>
-        triggerNode.parentNode as HTMLElement
-      }
+      getPopupContainer={(triggerNode: HTMLElement) => triggerNode.parentNode as HTMLElement}
     >
       <Select
         {...restProps}
         ref={selectRef}
         className={styles.select}
         dropdownClassName={styles.selectDropdown}
-        placeholder={placeholder || "输入关键字，回车分割"}
+        placeholder={placeholder || translate(i18n, "MultipleEnterInputSelect.Placeholder")}
         dropdownStyle={{ zIndex: zIndex + 10 }}
         menuItemSelectedIcon={<Close style={{ color: "#999", fontSize: 12 }} />}
         mode="multiple"
-        value={curValue}
+        value={curValue as any}
         defaultActiveFirstOption={false}
         showArrow={false}
         filterOption={false}
+        onChange={(v) => handleChange(v as any)}
         onMouseEnter={(e: React.MouseEvent<HTMLInputElement>) => {
           onMouseEnter && onMouseEnter(e);
           popoverContent && setPopoverVisible(true);
@@ -126,14 +164,13 @@ export const MultipleEnterInputSelect = (props: IProps) => {
           setPopoverVisible(false);
         }}
         onBlur={() => {
-          onBlur && onBlur(curValue);
+          onBlur && onBlur(curValue as any);
           setPopoverVisible(false);
         }}
         onInputKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
           onInputKeyDown && onInputKeyDown(e);
           onCurrentInputKeyDown(e);
         }}
-        onChange={(value: any) => handleChange(value)}
         notFoundContent={null}
       >
         {options}
@@ -144,5 +181,6 @@ export const MultipleEnterInputSelect = (props: IProps) => {
 
 MultipleEnterInputSelect.defaultProps = {
   zIndex: zIndexDefault,
+  language: zhCN,
 };
 export default MultipleEnterInputSelect;

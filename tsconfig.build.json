@@ -1,14 +1,9 @@
 {
+  "extends": "./tsconfig",
   "compilerOptions": {
-    "outDir": "dist",
-    "module": "esnext",
-    "target": "es5",
     "declaration": true,
-    "jsx": "react",
-    "moduleResolution": "Node",
-    "allowSyntheticDefaultImports": true
+    "removeComments": false
   },
-  "include": ["src"],
   "exclude": [
     "src/**/*.test.tsx",
     "src/setupTests.ts",
