@@ -3,7 +3,6 @@ import { createUseStyles } from "react-jss";
 import { message, Popover } from "@shuyun-ep-team/kylin-ui";
 import Select, { ISelectProps } from "@shuyun-ep-team/kylin-ui/es/select";
 import Close from "@shuyun-ep-team/icons/react/Close";
-import { isString } from "@shuyun-ep-team/utils/es/type";
 import { isNumeric } from "../../helpers";
 import { translate } from "../../helpers/translate";
 import { TLanguage } from "../../types/language";
@@ -17,13 +16,17 @@ const useStyles = createUseStyles(styles);
 
 export type tValue = Array<string | number>;
 export type tValueType = "string" | "number";
-export interface IProps extends Omit<ISelectProps, "onChange"> {
-  /**设置组件使用语言 */
+export interface IProps extends Omit<ISelectProps, "value"> {
+  /**使用语言 */
   language?: TLanguage;
+  /* 输入类型 */
   valueType?: tValueType;
-  validator?: (value: string | number, callback: (msg?: string) => void) => void;
-  onChange?: (v: tValue) => void;
+  /* 值类型 */
+  value?: tValue;
+  /* z-index */
   zIndex?: number;
+  /* 外部验证函数 */
+  validator?: (value: string | number, callback: (msg?: string) => void) => void;
 }
 
 const zIndexDefault = 1000;
@@ -34,15 +37,15 @@ const timeoutDefault = 500;
  * ### 引用方法
  *
  * ~~~js
- * import { Button } from 'kzf-business-components'
+ * import { MultipleEnterInputSelect } from 'kzf-business-components'
  * ~~~
  */
 export const MultipleEnterInputSelect = (props: IProps) => {
   const {
     placeholder,
-    zIndex = zIndexDefault,
+    zIndex,
     value,
-    valueType = "string",
+    valueType,
     validator,
     onInputKeyDown,
     onMouseEnter,
@@ -58,7 +61,11 @@ export const MultipleEnterInputSelect = (props: IProps) => {
   const [popoverVisible, setPopoverVisible] = useState(false);
 
   const curValue = useMemo(() => {
-    return (Array.isArray(value) ? value : []) as tValue;
+    if (Array.isArray(value)) {
+      const values = value.map((item) => `${item}`);
+      return [...new Set(values)];
+    }
+    return [];
   }, [value]);
 
   useEffect(() => {
@@ -70,14 +77,13 @@ export const MultipleEnterInputSelect = (props: IProps) => {
   const onCurrentInputKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLInputElement>) => {
       if (e.keyCode === 13) {
-        let val: string | number = (e.target as HTMLInputElement).value;
+        const val = (e.target as HTMLInputElement).value;
         if (val) {
           if (valueType === "number") {
             if (!isNumeric(val) || val.includes("+")) {
               message.error(translate(i18n, "MultipleEnterInputSelect.Message.Error.EnterNumber"));
               return;
             }
-            val = Number(val);
           }
           if (curValue.includes(val)) {
             message.error(translate(i18n, "MultipleEnterInputSelect.Message.Error.Duplicate"));
@@ -110,13 +116,19 @@ export const MultipleEnterInputSelect = (props: IProps) => {
   );
 
   const handleChange = useCallback(
-    (v: tValue) => {
+    (v) => {
       const { onChange } = props;
       if (onChange) {
         let values = v || [];
         if (valueType === "number") {
-          values = values.filter((item: string | number) => !isString(item));
+          values = values.map((item: string | number) => {
+            if (isNumeric(item)) {
+              return Number(item);
+            }
+            return item;
+          });
         }
+        //@ts-ignore
         onChange(values);
       }
     },
@@ -143,7 +155,7 @@ export const MultipleEnterInputSelect = (props: IProps) => {
         className={styles.select}
         dropdownClassName={styles.selectDropdown}
         placeholder={placeholder || translate(i18n, "MultipleEnterInputSelect.Placeholder")}
-        dropdownStyle={{ zIndex: zIndex + 10 }}
+        dropdownStyle={{ zIndex: zIndex! + 10 }}
         menuItemSelectedIcon={<Close style={{ color: "#999", fontSize: 12 }} />}
         mode="multiple"
         value={curValue as any}
@@ -182,5 +194,6 @@ export const MultipleEnterInputSelect = (props: IProps) => {
 MultipleEnterInputSelect.defaultProps = {
   zIndex: zIndexDefault,
   language: zhCN,
+  valueType: "string",
 };
 export default MultipleEnterInputSelect;
