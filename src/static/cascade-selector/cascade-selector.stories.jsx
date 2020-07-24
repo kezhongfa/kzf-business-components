@@ -11,7 +11,9 @@ export default {
 export const CascadeSelector = () => (
   <>
     <h1>级联选择器</h1>
-    <p>如何使用请点击Notes查看</p>
+    <p>
+      如何使用请点击<span style={{ color: "red" }}>上方Notes</span>查看
+    </p>
   </>
 );
 

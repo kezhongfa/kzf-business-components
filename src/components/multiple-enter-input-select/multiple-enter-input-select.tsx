@@ -16,24 +16,32 @@ const useStyles = createUseStyles(styles);
 
 export type tValue = Array<string | number>;
 export type tValueType = "string" | "number";
+export type tSpaceKeyValue = string[] | string;
 export interface IProps extends Omit<ISelectProps, "value"> {
   /**使用语言 */
   language?: TLanguage;
-  /* 输入类型 */
+  /** 输入类型 */
   valueType?: tValueType;
-  /* 值类型 */
+  /** 值类型 */
   value?: tValue;
-  /* z-index */
+  /** z-index */
   zIndex?: number;
-  /* 外部验证函数 */
+  /**是否启用空格键 */
+  isSpaceKeyEnable?: boolean;
+  /**启用空格键后,自定义的值 */
+  spaceKeyValue?: tSpaceKeyValue;
+  /** 外部验证函数 */
   validator?: (value: string | number, callback: (msg?: string) => void) => void;
 }
 
 const zIndexDefault = 1000;
 const timeoutDefault = 500;
+const spaceKeyValueDefault = ["#null#"];
 
 /**
- * 页面中最常用的的按钮元素，适合于完成特定的交互
+ * 1.支持number和string类型
+ * 2.支持启用空格键,自定义值
+ *
  * ### 引用方法
  *
  * ~~~js
@@ -42,37 +50,69 @@ const timeoutDefault = 500;
  */
 export const MultipleEnterInputSelect = (props: IProps) => {
   const {
-    placeholder,
-    zIndex,
+    isSpaceKeyEnable,
+    spaceKeyValue,
     value,
+    language,
     valueType,
+    zIndex,
     validator,
+    placeholder,
     onInputKeyDown,
     onMouseEnter,
     onMouseLeave,
     onFocus,
     onBlur,
-    language,
     ...restProps
   } = props;
   const styles = useStyles();
   const selectRef = useRef<HTMLSelectElement>();
   const i18n = useMemo(() => getCurLanguage(language), [language]);
   const [popoverVisible, setPopoverVisible] = useState(false);
+  const [isEnterSpace, setIsEnterSpace] = useState(false);
 
   const curValue = useMemo(() => {
     if (Array.isArray(value)) {
-      const values = value.map((item) => `${item}`);
+      const values = value.map((item: string | number) => `${item}`);
       return [...new Set(values)];
     }
     return [];
   }, [value]);
+
+  const curTabValue = useMemo(() => {
+    if (Array.isArray(spaceKeyValue) && spaceKeyValue.length > 0) {
+      return spaceKeyValue;
+    }
+
+    return spaceKeyValue ? [spaceKeyValue] : spaceKeyValueDefault;
+  }, [spaceKeyValue]);
 
   useEffect(() => {
     if (curValue.length <= 0) {
       setPopoverVisible(false);
     }
   }, [curValue]);
+
+  const handleChange = useCallback(
+    (v) => {
+      const { onChange } = props;
+      setIsEnterSpace(false);
+      if (onChange) {
+        let values = v || [];
+        if (valueType === "number") {
+          values = values.map((item: string | number) => {
+            if (isNumeric(item)) {
+              return Number(item);
+            }
+            return item;
+          });
+        }
+        //@ts-ignore
+        onChange(values);
+      }
+    },
+    [valueType, props]
+  );
 
   const onCurrentInputKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -112,32 +152,15 @@ export const MultipleEnterInputSelect = (props: IProps) => {
         }
       }
     },
-    [curValue, validator, valueType]
-  );
-
-  const handleChange = useCallback(
-    (v) => {
-      const { onChange } = props;
-      if (onChange) {
-        let values = v || [];
-        if (valueType === "number") {
-          values = values.map((item: string | number) => {
-            if (isNumeric(item)) {
-              return Number(item);
-            }
-            return item;
-          });
-        }
-        //@ts-ignore
-        onChange(values);
-      }
-    },
-    [props?.onChange]
+    [curValue, validator, valueType, handleChange, i18n]
   );
 
   const options = useMemo(() => {
+    if (isSpaceKeyEnable && isEnterSpace) {
+      return curTabValue.map((d) => <Option key={`${d}`}>{d}</Option>);
+    }
     return curValue.map((d) => <Option key={d}>{d}</Option>);
-  }, [curValue]);
+  }, [curValue, curTabValue, isEnterSpace, isSpaceKeyEnable]);
 
   const popoverContent = useMemo(() => {
     return curValue.join("、");
@@ -152,17 +175,19 @@ export const MultipleEnterInputSelect = (props: IProps) => {
       <Select
         {...restProps}
         ref={selectRef}
-        className={styles.select}
-        dropdownClassName={styles.selectDropdown}
+        className={isEnterSpace ? "" : styles.select}
+        dropdownClassName={isEnterSpace ? "" : styles.selectDropdown}
         placeholder={placeholder || translate(i18n, "MultipleEnterInputSelect.Placeholder")}
         dropdownStyle={{ zIndex: zIndex! + 10 }}
-        menuItemSelectedIcon={<Close style={{ color: "#999", fontSize: 12 }} />}
+        menuItemSelectedIcon={
+          isEnterSpace ? undefined : <Close style={{ color: "#999", fontSize: 12 }} />
+        }
         mode="multiple"
         value={curValue as any}
         defaultActiveFirstOption={false}
         showArrow={false}
         filterOption={false}
-        onChange={(v) => handleChange(v as any)}
+        onChange={(v) => handleChange(v)}
         onMouseEnter={(e: React.MouseEvent<HTMLInputElement>) => {
           onMouseEnter && onMouseEnter(e);
           popoverContent && setPopoverVisible(true);
@@ -178,10 +203,16 @@ export const MultipleEnterInputSelect = (props: IProps) => {
         onBlur={() => {
           onBlur && onBlur(curValue as any);
           setPopoverVisible(false);
+          setIsEnterSpace(false);
         }}
         onInputKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
           onInputKeyDown && onInputKeyDown(e);
-          onCurrentInputKeyDown(e);
+          !isEnterSpace && onCurrentInputKeyDown(e);
+        }}
+        onSearch={(value: string) => {
+          if (isSpaceKeyEnable) {
+            setIsEnterSpace(value === " ");
+          }
         }}
         notFoundContent={null}
       >
@@ -195,5 +226,8 @@ MultipleEnterInputSelect.defaultProps = {
   zIndex: zIndexDefault,
   language: zhCN,
   valueType: "string",
+  value: [],
+  isSpaceKeyEnable: false,
+  spaceKeyValue: spaceKeyValueDefault,
 };
 export default MultipleEnterInputSelect;
