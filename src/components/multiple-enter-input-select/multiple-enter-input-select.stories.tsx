@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from "react";
-import { withKnobs, array } from "@storybook/addon-knobs";
+import { withKnobs, array, text } from "@storybook/addon-knobs";
 import MultipleEnterInputSelect from "./multiple-enter-input-select";
 import { isNumeric } from "src/helpers";
 
@@ -90,6 +90,8 @@ export const TestSpace = () => {
   return (
     <MultipleEnterInputSelect
       style={{ width: 300 }}
+      //@ts-ignore
+      language={text("kk", "zh-CN")}
       isSpaceKeyEnable={true}
       spaceKeyValue={array("spaceKeyValue", ["#empty#", "#null#", "#空值#"])}
       valueType="number"
