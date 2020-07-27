@@ -6,7 +6,6 @@ const { version, tag = "latest" } = argv;
 
 if (version) {
   shell.exec(`npm version ${version} -m "chore: version %s"`);
-  shell.exec("npm run build");
   shell.cp("package.json", "dist");
   shell.cp("README.md", "dist");
   shell.exec("npm config get registry", (_, stdout) => {
@@ -14,9 +13,7 @@ if (version) {
       shell.exec("npm config set registry=https://registry.npmjs.org");
     }
     shell.exec(`npm publish --access=public dist --tag ${tag}`);
-    shell.exec(
-      "curl -X PUT https://npm.taobao.org/sync/kzf-business-components"
-    );
+    shell.exec("curl -X PUT https://npm.taobao.org/sync/kzf-business-components");
     shell.exec("git push --follow-tags");
   });
 } else {

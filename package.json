@@ -33,6 +33,7 @@
     "build:test": "cross-env CI=true react-scripts test",
     "build:debug": "node scripts/debug-info.js",
     "build:ts": "tsc -p tsconfig.build.json",
+    "preversion": "npm run build",
     "build": "npm run clean && npm run codecheck && npm run build:ts && npm run build:debug",
     "prettier": "npx prettier --write src/**/*"
   },
