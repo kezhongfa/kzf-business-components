@@ -1,7 +1,7 @@
 {
   "name": "kzf-business-components",
   "version": "0.1.4",
-  "description": "麒麟UI业务组件",
+  "description": "麒麟业务组件",
   "author": "kezhongfa",
   "keywords": [
     "Component",
@@ -83,6 +83,7 @@
     "@shuyun-ep-team/eslint-config": "^1.1.9",
     "@storybook/addon-a11y": "^5.3.19",
     "@storybook/addon-actions": "^5.3.19",
+    "@storybook/addon-backgrounds": "^5.3.19",
     "@storybook/addon-console": "^1.2.1",
     "@storybook/addon-docs": "^5.3.19",
     "@storybook/addon-info": "^5.3.19",

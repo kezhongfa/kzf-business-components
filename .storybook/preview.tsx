@@ -1,9 +1,9 @@
 import React from "react";
 import { addDecorator, addParameters, configure } from "@storybook/react";
 import { withConsole } from "@storybook/addon-console";
-// import { withInfo } from "@storybook/addon-info";
 import "@shuyun-ep-team/kylin-ui/es/styles/index.css";
-
+import { bodyBackground } from "@shuyun-ep-team/kylin-ui/es/styles/vars";
+import "../src/styles/index.css";
 const globalWrapperStyle: React.CSSProperties = {
   padding: "20px",
 };
@@ -11,8 +11,13 @@ const globalWrapperStyle: React.CSSProperties = {
 const globalWrapper = (stroyFn: any) => <div style={globalWrapperStyle}>{stroyFn()}</div>;
 addDecorator(globalWrapper);
 addDecorator((storyFn, context) => withConsole()(storyFn)(context));
-// addDecorator(withInfo);
-// addParameters({ info: { inline: true, header: false } });
+
+addParameters({
+  backgrounds: [
+    { name: "默认", value: "#fff", default: true },
+    { name: "麒麟UI", value: bodyBackground },
+  ],
+});
 
 const loaderFn = () => {
   const allExports = [require("../src/home.stories.jsx")];
