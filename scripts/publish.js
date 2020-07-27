@@ -5,6 +5,7 @@ const argv = require("./argv");
 const { version, tag = "latest" } = argv;
 
 if (version) {
+  shell.exec("npm run build");
   shell.exec(`npm version ${version} -m "chore: version %s"`);
   shell.cp("package.json", "dist");
   shell.cp("README.md", "dist");
