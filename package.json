@@ -8,9 +8,6 @@
     "UI",
     "React"
   ],
-  "files": [
-    "dist"
-  ],
   "main": "index.js",
   "module": "index.js",
   "types": "index.d.ts",
