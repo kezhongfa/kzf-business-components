@@ -14,8 +14,10 @@ addDecorator((storyFn, context) => withConsole()(storyFn)(context));
 
 addParameters({
   backgrounds: [
-    { name: "默认", value: "#fff", default: true },
-    { name: "麒麟UI", value: bodyBackground },
+    { name: "default", value: "#fff", default: true },
+    { name: "kylin", value: bodyBackground },
+    { name: "twitter", value: "#00aced" },
+    { name: "facebook", value: "#3b5998" },
   ],
 });
 

@@ -30,9 +30,10 @@
     "build:storybook": "build-storybook -s public",
     "prestart": "npm run check-nodeJs-version && npm run checkDependencies",
     "start": "react-scripts start",
+    "build:test": "cross-env CI=true react-scripts test",
     "build:debug": "node scripts/debug-info.js",
     "build:ts": "tsc -p tsconfig.build.json",
-    "build": "npm run clean && npm run codecheck && npm run build:ts && npm run build:debug",
+    "build": "npm run clean && npm run build:test && npm run codecheck && npm run build:ts && npm run build:debug",
     "prettier": "npx prettier --write src/**/*"
   },
   "husky": {
@@ -104,6 +105,7 @@
     "@types/react-dom": "^16.9.8",
     "@types/storybook__addon-info": "^5.2.1",
     "colors": "^1.4.0",
+    "cross-env": "^7.0.2",
     "husky": "^4.2.5",
     "lint-staged": "^10.2.11",
     "minimist": "^1.2.5",
