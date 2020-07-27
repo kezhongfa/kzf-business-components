@@ -1,37 +1,26 @@
 import React from "react";
 import { addDecorator, addParameters, configure } from "@storybook/react";
+import { withConsole } from "@storybook/addon-console";
 // import { withInfo } from "@storybook/addon-info";
 import "@shuyun-ep-team/kylin-ui/es/styles/index.css";
 
-const wrapperStyle: React.CSSProperties = {
+const globalWrapperStyle: React.CSSProperties = {
   padding: "20px",
 };
 
-const storyWrapper = (stroyFn: any) => (
-  <div style={wrapperStyle}>
-    <h3>组件演示</h3>
-    {stroyFn()}
-  </div>
-);
-addDecorator(storyWrapper);
+const globalWrapper = (stroyFn: any) => <div style={globalWrapperStyle}>{stroyFn()}</div>;
+addDecorator(globalWrapper);
+addDecorator((storyFn, context) => withConsole()(storyFn)(context));
 // addDecorator(withInfo);
 // addParameters({ info: { inline: true, header: false } });
 
 const loaderFn = () => {
-  const allExports = [require("../src/welcome.stories.jsx")];
-  const staticReq = require.context(
-    "../src/static",
-    true,
-    /\.stories\.(js|jsx|ts|tsx)$/
-  );
+  const allExports = [require("../src/home.stories.jsx")];
+  const staticReq = require.context("../src/static", true, /\.stories\.(js|jsx|ts|tsx)$/);
 
   staticReq.keys().forEach((fname) => allExports.push(staticReq(fname)));
 
-  const req = require.context(
-    "../src/components",
-    true,
-    /\.stories\.(js|jsx|ts|tsx)$/
-  );
+  const req = require.context("../src/components", true, /\.stories\.(js|jsx|ts|tsx)$/);
 
   req.keys().forEach((fname) => allExports.push(req(fname)));
   return allExports;

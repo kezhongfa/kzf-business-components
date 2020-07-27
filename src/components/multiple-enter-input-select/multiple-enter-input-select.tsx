@@ -3,15 +3,14 @@ import { createUseStyles } from "react-jss";
 import { message, Popover } from "@shuyun-ep-team/kylin-ui";
 import Select, { ISelectProps } from "@shuyun-ep-team/kylin-ui/es/select";
 import Close from "@shuyun-ep-team/icons/react/Close";
+import { languageDefault } from "../../constants/language";
 import { isNumeric } from "../../helpers";
 import { translate } from "../../helpers/translate";
 import { TLanguage } from "../../types/language";
-import { languageJson } from "../../constants/language";
 import * as styles from "./index.jss";
 import { getCurLanguage } from "./i18n";
 
 const { Option } = Select;
-const { zhCN } = languageJson;
 const useStyles = createUseStyles(styles);
 
 export type tValue = Array<string | number>;
@@ -67,7 +66,8 @@ export const MultipleEnterInputSelect = (props: IProps) => {
   } = props;
   const styles = useStyles();
   const selectRef = useRef<HTMLSelectElement>();
-  const i18n = useMemo(() => getCurLanguage(language), [language]);
+
+  const [i18n, setI18n] = useState({});
   const [popoverVisible, setPopoverVisible] = useState(false);
   const [isEnterSpace, setIsEnterSpace] = useState(false);
 
@@ -79,13 +79,19 @@ export const MultipleEnterInputSelect = (props: IProps) => {
     return [];
   }, [value]);
 
-  const curTabValue = useMemo(() => {
+  const curSpaceValue = useMemo(() => {
     if (Array.isArray(spaceKeyValue) && spaceKeyValue.length > 0) {
       return spaceKeyValue;
     }
 
     return spaceKeyValue ? [spaceKeyValue] : spaceKeyValueDefault;
   }, [spaceKeyValue]);
+
+  useEffect(() => {
+    getCurLanguage(language).then((res) => {
+      setI18n(res);
+    });
+  }, [language]);
 
   useEffect(() => {
     if (curValue.length <= 0) {
@@ -157,10 +163,10 @@ export const MultipleEnterInputSelect = (props: IProps) => {
 
   const options = useMemo(() => {
     if (isSpaceKeyEnable && isEnterSpace) {
-      return curTabValue.map((d) => <Option key={`${d}`}>{d}</Option>);
+      return curSpaceValue.map((d) => <Option key={`${d}`}>{d}</Option>);
     }
     return curValue.map((d) => <Option key={d}>{d}</Option>);
-  }, [curValue, curTabValue, isEnterSpace, isSpaceKeyEnable]);
+  }, [curValue, curSpaceValue, isEnterSpace, isSpaceKeyEnable]);
 
   const popoverContent = useMemo(() => {
     return curValue.join("、");
@@ -224,7 +230,7 @@ export const MultipleEnterInputSelect = (props: IProps) => {
 
 MultipleEnterInputSelect.defaultProps = {
   zIndex: zIndexDefault,
-  language: zhCN,
+  language: languageDefault,
   valueType: "string",
   value: [],
   isSpaceKeyEnable: false,

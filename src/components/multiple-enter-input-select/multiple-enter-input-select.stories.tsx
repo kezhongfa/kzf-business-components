@@ -2,11 +2,12 @@ import React, { useState, useCallback } from "react";
 import { withKnobs, array, text } from "@storybook/addon-knobs";
 import MultipleEnterInputSelect from "./multiple-enter-input-select";
 import { isNumeric } from "src/helpers";
+import { commonStoryWrapper } from "src/helpers/story";
 
 export default {
   title: "多值回车输入组件",
   component: MultipleEnterInputSelect,
-  decorators: [withKnobs],
+  decorators: [withKnobs, commonStoryWrapper],
 };
 
 /* 默认 */
@@ -18,6 +19,7 @@ export const TestDefault = () => {
   }, []);
   return (
     <MultipleEnterInputSelect
+      style={{ width: 300 }}
       value={multipleEnterInputValue}
       onChange={onMultipleEnterInputValueChange}
     />

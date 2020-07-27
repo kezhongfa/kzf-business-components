@@ -1,21 +1,12 @@
-import { languageJson } from "../../../constants/language";
-import zhCN from "./zh-CN.json";
-import enUS from "./en-US.json";
+import { languageDefault } from "../../../constants/language";
 
-interface IAllLanguageJson {
-  [key: string]: {
-    [key: string]: string;
-  };
-}
-const allLanguageJson: IAllLanguageJson = {
-  "zh-CN": zhCN,
-  "en-US": enUS,
-};
-
-export function getCurLanguage(lang?: string) {
-  const curLanguage = lang || languageJson.zhCN;
-  if (Object.values(languageJson).includes(curLanguage)) {
-    return allLanguageJson[curLanguage];
+export const getCurLanguage = async (lang?: string): Promise<{ [key: string]: string }> => {
+  const curLanguage = lang || languageDefault;
+  try {
+    const result = await import(`./${curLanguage}.json`);
+    return result;
+  } catch {
+    const result = await import(`./${languageDefault}.json`);
+    return result;
   }
-  return allLanguageJson["zh-CN"];
-}
+};
