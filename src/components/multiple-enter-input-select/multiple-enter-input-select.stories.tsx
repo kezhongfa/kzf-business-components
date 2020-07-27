@@ -1,8 +1,8 @@
 import React, { useState, useCallback } from "react";
 import { withKnobs, array, text } from "@storybook/addon-knobs";
 import MultipleEnterInputSelect from "./multiple-enter-input-select";
-import { isNumeric } from "src/helpers";
-import { commonStoryWrapper } from "src/helpers/story";
+import { isNumeric } from "../../helpers";
+import { commonStoryWrapper } from "../../helpers/story";
 
 export default {
   title: "多值回车输入组件",

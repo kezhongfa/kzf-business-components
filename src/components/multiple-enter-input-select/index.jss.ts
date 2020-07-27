@@ -1,10 +1,7 @@
-import ICSSProperties from "@shuyun-ep-team/utils/es/jss/typings/style";
-import {
-  antPrefix,
-  primaryColor,
-} from "@shuyun-ep-team/kylin-ui/es/styles/vars";
+import { antPrefix, primaryColor } from "@shuyun-ep-team/kylin-ui/es/styles/vars";
+import { Styles } from "jss";
 
-export const select: ICSSProperties = {
+export const select: Styles = {
   [`& .${antPrefix}-select-selection--multiple`]: {
     overflow: "hidden",
   },
@@ -16,7 +13,7 @@ export const select: ICSSProperties = {
   },
 };
 
-export const selectDropdown: ICSSProperties = {
+export const selectDropdown: Styles = {
   "& ul li": {
     position: "relative",
     float: "left",
