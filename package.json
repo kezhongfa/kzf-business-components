@@ -74,8 +74,6 @@
     "@shuyun-ep-team/kylin-ui": "^0.2.5",
     "@shuyun-ep-team/utils": "^1.8.0",
     "classnames": "^2.2.6",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
     "react-jss": "^10.3.0"
   },
   "devDependencies": {
@@ -110,7 +108,9 @@
     "lint-staged": "^10.2.11",
     "minimist": "^1.2.5",
     "prettier": "^2.0.5",
+    "react": "^16.13.1",
     "react-docgen-typescript-loader": "^3.7.2",
+    "react-dom": "^16.13.1",
     "react-scripts": "^3.4.1",
     "rimraf": "^3.0.2",
     "shelljs": "^0.8.4",
