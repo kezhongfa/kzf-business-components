@@ -1,5 +1,5 @@
 {
-  "MultipleEnterInputSelect.Placeholder": "输入关键字，回车分割",
+  "MultipleEnterInputSelect.Placeholder": "输入，回车分割",
   "MultipleEnterInputSelect.Message.Error.Duplicate": "有重复项",
   "MultipleEnterInputSelect.Message.Error.EnterNumber": "必须输入数字"
 }

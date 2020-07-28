@@ -5,7 +5,7 @@ import { isNumeric } from "../../helpers";
 import { commonStoryWrapper } from "../../helpers/story";
 
 export default {
-  title: "多值回车输入组件",
+  title: "回车输入组件",
   component: MultipleEnterInputSelect,
   decorators: [withKnobs, commonStoryWrapper],
 };
@@ -15,7 +15,7 @@ export const TestDefault = () => {
   const [multipleEnterInputValue, setMultipleEnterInputValue] = useState(undefined);
   const onMultipleEnterInputValueChange = useCallback((v) => {
     setMultipleEnterInputValue(v);
-    console.log("onMultipleEnterInputValueChange:", v);
+    console.log("onChange:", v);
   }, []);
   return (
     <MultipleEnterInputSelect
@@ -27,7 +27,7 @@ export const TestDefault = () => {
 };
 
 TestDefault.story = {
-  name: "默认",
+  name: "回车输入组件-默认",
 };
 
 /* number测试 */
@@ -35,7 +35,7 @@ export const TestNumber = () => {
   const [multipleEnterInputValue, setMultipleEnterInputValue] = useState(undefined);
   const onMultipleEnterInputValueChange = useCallback((v) => {
     setMultipleEnterInputValue(v);
-    console.log("onMultipleEnterInputValueChange:", v);
+    console.log("onChange:", v);
   }, []);
   return (
     <MultipleEnterInputSelect
@@ -48,7 +48,7 @@ export const TestNumber = () => {
 };
 
 TestNumber.story = {
-  name: "number测试",
+  name: "回车输入组件-number测试",
 };
 
 /* 外部验证测试 */
@@ -56,7 +56,7 @@ export const TestValidator = () => {
   const [multipleEnterInputValue, setMultipleEnterInputValue] = useState(undefined);
   const onMultipleEnterInputValueChange = useCallback((v) => {
     setMultipleEnterInputValue(v);
-    console.log("onMultipleEnterInputValueChange:", v);
+    console.log("onChange:", v);
   }, []);
 
   const onValidateValue = useCallback((value: any, callback: any) => {
@@ -79,7 +79,7 @@ export const TestValidator = () => {
 };
 
 TestValidator.story = {
-  name: "外部验证测试",
+  name: "回车输入组件-外部验证测试",
 };
 
 /* 空格键功能测试 */
@@ -87,13 +87,13 @@ export const TestSpace = () => {
   const [multipleEnterInputValue, setMultipleEnterInputValue] = useState(undefined);
   const onMultipleEnterInputValueChange = useCallback((v) => {
     setMultipleEnterInputValue(v);
-    console.log("onMultipleEnterInputValueChange:", v);
+    console.log("onChange:", v);
   }, []);
   return (
     <MultipleEnterInputSelect
       style={{ width: 300 }}
       //@ts-ignore
-      language={text("kk", "zh-CN")}
+      language={text("language", "zh-CN")}
       isSpaceKeyEnable={true}
       spaceKeyValue={array("spaceKeyValue", ["#empty#", "#null#", "#空值#"])}
       valueType="number"
@@ -104,5 +104,5 @@ export const TestSpace = () => {
 };
 
 TestSpace.story = {
-  name: "空格键功能测试",
+  name: "回车输入组件-空格键功能测试",
 };
