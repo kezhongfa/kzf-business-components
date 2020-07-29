@@ -30,7 +30,7 @@ export interface IProps extends Omit<ISelectProps, "value"> {
   /**启用空格键后,自定义的值 */
   spaceKeyValue?: tSpaceKeyValue;
   /** 外部验证函数 */
-  validator?: (value: string | number, callback: (msg?: string) => void) => void;
+  validator?: (values: tValue, value: string | number, callback: (msg?: string) => void) => void;
 }
 
 const zIndexDefault = 1000;
@@ -137,7 +137,7 @@ export const MultipleEnterInputSelect = (props: IProps) => {
           }
 
           if (validator) {
-            validator(val, (msg?: string) => {
+            validator(curValue, val, (msg?: string) => {
               if (msg) {
                 message.error(msg);
               } else {

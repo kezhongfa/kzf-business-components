@@ -12,18 +12,12 @@ export default {
 
 /* 默认 */
 export const TestDefault = () => {
-  const [multipleEnterInputValue, setMultipleEnterInputValue] = useState(undefined);
-  const onMultipleEnterInputValueChange = useCallback((v) => {
-    setMultipleEnterInputValue(v);
+  const [value, setValue] = useState(undefined);
+  const onChange = useCallback((v) => {
+    setValue(v);
     console.log("onChange:", v);
   }, []);
-  return (
-    <MultipleEnterInputSelect
-      style={{ width: 300 }}
-      value={multipleEnterInputValue}
-      onChange={onMultipleEnterInputValueChange}
-    />
-  );
+  return <MultipleEnterInputSelect style={{ width: 300 }} value={value} onChange={onChange} />;
 };
 
 TestDefault.story = {
@@ -32,34 +26,34 @@ TestDefault.story = {
 
 /* number测试 */
 export const TestNumber = () => {
-  const [multipleEnterInputValue, setMultipleEnterInputValue] = useState(undefined);
-  const onMultipleEnterInputValueChange = useCallback((v) => {
-    setMultipleEnterInputValue(v);
+  const [value, setValue] = useState(undefined);
+  const onChange = useCallback((v) => {
+    setValue(v);
     console.log("onChange:", v);
   }, []);
   return (
     <MultipleEnterInputSelect
       style={{ width: 300 }}
       valueType="number"
-      value={multipleEnterInputValue}
-      onChange={onMultipleEnterInputValueChange}
+      value={value}
+      onChange={onChange}
     />
   );
 };
 
 TestNumber.story = {
-  name: "回车输入组件-number测试",
+  name: "回车输入组件-number",
 };
 
 /* 外部验证测试 */
 export const TestValidator = () => {
-  const [multipleEnterInputValue, setMultipleEnterInputValue] = useState(undefined);
-  const onMultipleEnterInputValueChange = useCallback((v) => {
-    setMultipleEnterInputValue(v);
+  const [value, setValue] = useState(undefined);
+  const onChange = useCallback((v) => {
+    setValue(v);
     console.log("onChange:", v);
   }, []);
 
-  const onValidateValue = useCallback((value: any, callback: any) => {
+  const onValidateValue = useCallback((_, value: any, callback: any) => {
     if (!isNumeric(value) || Number.parseFloat(value) < 0) {
       callback("必须输入正数");
     } else {
@@ -72,21 +66,21 @@ export const TestValidator = () => {
       style={{ width: 300 }}
       valueType="number"
       validator={onValidateValue}
-      value={multipleEnterInputValue}
-      onChange={onMultipleEnterInputValueChange}
+      value={value}
+      onChange={onChange}
     />
   );
 };
 
 TestValidator.story = {
-  name: "回车输入组件-外部验证测试",
+  name: "回车输入组件-外部验证",
 };
 
 /* 空格键功能测试 */
 export const TestSpace = () => {
-  const [multipleEnterInputValue, setMultipleEnterInputValue] = useState(undefined);
-  const onMultipleEnterInputValueChange = useCallback((v) => {
-    setMultipleEnterInputValue(v);
+  const [value, setValue] = useState(undefined);
+  const onChange = useCallback((v) => {
+    setValue(v);
     console.log("onChange:", v);
   }, []);
   return (
@@ -97,12 +91,12 @@ export const TestSpace = () => {
       isSpaceKeyEnable={true}
       spaceKeyValue={array("spaceKeyValue", ["#empty#", "#null#", "#空值#"])}
       valueType="number"
-      value={multipleEnterInputValue}
-      onChange={onMultipleEnterInputValueChange}
+      value={value}
+      onChange={onChange}
     />
   );
 };
 
 TestSpace.story = {
-  name: "回车输入组件-空格键功能测试",
+  name: "回车输入组件-空格键功能",
 };

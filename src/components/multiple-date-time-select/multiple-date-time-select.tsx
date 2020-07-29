@@ -2,7 +2,7 @@ import React, { useState, useCallback, useMemo, useRef, useEffect } from "react"
 import { createUseStyles } from "react-jss";
 import cls from "classnames";
 import { antPrefix } from "@shuyun-ep-team/kylin-ui/es/styles/vars";
-import { Dropdown, Tooltip } from "@shuyun-ep-team/kylin-ui";
+import { Dropdown, Tooltip, message } from "@shuyun-ep-team/kylin-ui";
 import DTDateIcon from "@shuyun-ep-team/icons/react/DTDate";
 import DTDateTimeIcon from "@shuyun-ep-team/icons/react/DTDateTime";
 import DTTimeIcon from "@shuyun-ep-team/icons/react/DTTime";
@@ -44,6 +44,12 @@ export interface IProps {
   onChange?: (v: TDateTimeSelectValue) => void;
   /**菜单显示状态改变时调用，参数为 visible */
   onVisibleChange?: (visible: boolean) => void;
+  /** 外部验证函数 */
+  validator?: (
+    values: TDateTimeSelectValue,
+    value: TDateTimeSelectValueItem,
+    callback: (msg?: string) => void
+  ) => void;
 }
 
 const minHeightValue = 32;
@@ -68,6 +74,7 @@ export const MultipleDateTimeSelect = (props: IProps) => {
     trigger,
     timeType,
     language,
+    validator,
     ...restProps
   } = props;
   const styles = useStyles();
@@ -120,13 +127,26 @@ export const MultipleDateTimeSelect = (props: IProps) => {
   const handleTimeSelectOk = useCallback(
     (value) => {
       if (value && onChange) {
-        const result = [...curValue, value];
-        onChange(result);
-        setOverlayVisible(false);
-        onVisibleChange && onVisibleChange(false);
+        if (validator) {
+          validator(curValue, value, (msg?: string) => {
+            if (msg) {
+              message.error(msg);
+            } else {
+              const result = [...curValue, value];
+              onChange(result);
+              setOverlayVisible(false);
+              onVisibleChange && onVisibleChange(false);
+            }
+          });
+        } else {
+          const result = [...curValue, value];
+          onChange(result);
+          setOverlayVisible(false);
+          onVisibleChange && onVisibleChange(false);
+        }
       }
     },
-    [curValue]
+    [curValue, validator, onChange]
   );
 
   const overlay = useMemo(() => {
