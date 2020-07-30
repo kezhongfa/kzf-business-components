@@ -11,7 +11,7 @@ export default {
 
 export const Home = () => (
   <>
-    <h1>业务组件库</h1>
+    <h1>通用|业务组件库</h1>
     <ul>
       <li>Canvas: 简单描述</li>
       <li>Docs: 组件演示</li>
