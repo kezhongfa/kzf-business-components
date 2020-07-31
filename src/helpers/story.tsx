@@ -6,3 +6,5 @@ export const commonStoryWrapper = (stroyFn: any) => (
     {stroyFn()}
   </div>
 );
+
+export const languageOptions = ["zh-CN", "en-US"];

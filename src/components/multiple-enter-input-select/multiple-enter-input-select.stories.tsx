@@ -1,8 +1,10 @@
 import React, { useState, useCallback } from "react";
-import { withKnobs, array, text } from "@storybook/addon-knobs";
+import { withKnobs, array, select } from "@storybook/addon-knobs";
 import MultipleEnterInputSelect from "./multiple-enter-input-select";
 import { isNumeric } from "../../helpers";
 import { commonStoryWrapper } from "../../helpers/story";
+import { languageDefault } from "../../constants/language";
+import { languageOptions } from "../../helpers/story";
 
 export default {
   title: "回车输入组件",
@@ -17,7 +19,14 @@ export const TestDefault = () => {
     setValue(v);
     console.log("onChange:", v);
   }, []);
-  return <MultipleEnterInputSelect style={{ width: 300 }} value={value} onChange={onChange} />;
+  return (
+    <MultipleEnterInputSelect //@ts-ignore
+      language={select("language", languageOptions, languageDefault)}
+      style={{ width: 300 }}
+      value={value}
+      onChange={onChange}
+    />
+  );
 };
 
 TestDefault.story = {
@@ -33,6 +42,8 @@ export const TestNumber = () => {
   }, []);
   return (
     <MultipleEnterInputSelect
+      //@ts-ignore
+      language={select("language", languageOptions, languageDefault)}
       style={{ width: 300 }}
       valueType="number"
       value={value}
@@ -63,6 +74,8 @@ export const TestValidator = () => {
 
   return (
     <MultipleEnterInputSelect
+      //@ts-ignore
+      language={select("language", languageOptions, languageDefault)}
       style={{ width: 300 }}
       valueType="number"
       validator={onValidateValue}
@@ -87,7 +100,7 @@ export const TestSpace = () => {
     <MultipleEnterInputSelect
       style={{ width: 300 }}
       //@ts-ignore
-      language={text("language", "zh-CN")}
+      language={select("language", languageOptions, languageDefault)}
       isSpaceKeyEnable={true}
       spaceKeyValue={array("spaceKeyValue", ["#empty#", "#null#", "#空值#"])}
       valueType="number"

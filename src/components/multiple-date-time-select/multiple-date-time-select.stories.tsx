@@ -1,7 +1,12 @@
 import React, { useState, useCallback } from "react";
-import { withKnobs, array, text } from "@storybook/addon-knobs";
+import { withKnobs, select } from "@storybook/addon-knobs";
 import MultipleDateTimeSelect from "./multiple-date-time-select";
 import { commonStoryWrapper } from "../../helpers/story";
+import { languageDefault } from "../../constants/language";
+import { languageOptions } from "../../helpers/story";
+
+const timeTypeDefault = "date";
+const timeTypeOptions = ["date", "dateTime", "time"];
 
 export default {
   title: "时间多选组件",
@@ -19,9 +24,9 @@ export const TestDefault = () => {
   return (
     <MultipleDateTimeSelect
       //@ts-ignore
-      language={text("language", "zh-CN")}
+      language={select("language", languageOptions, languageDefault)}
       //@ts-ignore
-      timeType={text("timeType", "date")}
+      timeType={select("timeType", timeTypeOptions, timeTypeDefault)}
       style={{ width: 300 }}
       value={value}
       onChange={onChange}
@@ -52,9 +57,9 @@ export const TestValidator = () => {
   return (
     <MultipleDateTimeSelect
       //@ts-ignore
-      language={text("language", "zh-CN")}
+      language={select("language", languageOptions, languageDefault)}
       //@ts-ignore
-      timeType={text("timeType", "date")}
+      timeType={select("timeType", timeTypeOptions, timeTypeDefault)}
       style={{ width: 300 }}
       value={value}
       validator={onValidateValue}
