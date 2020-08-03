@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useMemo, useState, useEffect } from "react";
+import React, { useCallback, useRef, useMemo, useState, useEffect, forwardRef, Ref } from "react";
 import { createUseStyles } from "react-jss";
 import { message, Popover } from "@shuyun-ep-team/kylin-ui";
 import Select, { ISelectProps } from "@shuyun-ep-team/kylin-ui/es/select";
@@ -47,14 +47,14 @@ const spaceKeyValueDefault = ["#null#"];
  * import { MultipleEnterInputSelect } from 'kzf-business-components'
  * ~~~
  */
-export const MultipleEnterInputSelect = (props: IProps) => {
+export const MultipleEnterInputSelect = (props: IProps, ref: Ref<any>) => {
   const {
     isSpaceKeyEnable,
     spaceKeyValue,
     value,
-    language,
+    language = languageDefault,
     valueType,
-    zIndex,
+    zIndex = zIndexDefault,
     validator,
     placeholder,
     onInputKeyDown,
@@ -173,67 +173,70 @@ export const MultipleEnterInputSelect = (props: IProps) => {
   }, [curValue]);
 
   return (
-    <Popover
-      content={popoverContent}
-      visible={popoverVisible}
-      getPopupContainer={(triggerNode: HTMLElement) => triggerNode.parentNode as HTMLElement}
-    >
-      <Select
-        {...restProps}
-        ref={selectRef}
-        className={isEnterSpace ? "" : styles.select}
-        dropdownClassName={isEnterSpace ? "" : styles.selectDropdown}
-        placeholder={placeholder || translate(i18n, "MultipleEnterInputSelect.Placeholder")}
-        dropdownStyle={{ zIndex: zIndex! + 10 }}
-        menuItemSelectedIcon={
-          isEnterSpace ? undefined : <Close style={{ color: "#999", fontSize: 12 }} />
-        }
-        mode="multiple"
-        value={curValue as any}
-        defaultActiveFirstOption={false}
-        showArrow={false}
-        filterOption={false}
-        onChange={(v) => handleChange(v)}
-        onMouseEnter={(e: React.MouseEvent<HTMLInputElement>) => {
-          onMouseEnter && onMouseEnter(e);
-          popoverContent && setPopoverVisible(true);
-        }}
-        onMouseLeave={(e: React.MouseEvent<HTMLInputElement>) => {
-          onMouseLeave && onMouseLeave(e);
-          setPopoverVisible(false);
-        }}
-        onFocus={() => {
-          onFocus && onFocus();
-          setPopoverVisible(false);
-        }}
-        onBlur={() => {
-          onBlur && onBlur(curValue as any);
-          setPopoverVisible(false);
-          setIsEnterSpace(false);
-        }}
-        onInputKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-          onInputKeyDown && onInputKeyDown(e);
-          !isEnterSpace && onCurrentInputKeyDown(e);
-        }}
-        onSearch={(value: string) => {
-          if (isSpaceKeyEnable) {
-            setIsEnterSpace(value === " ");
-          }
-        }}
-        notFoundContent={null}
+    <span ref={ref}>
+      <Popover
+        content={popoverContent}
+        visible={popoverVisible}
+        getPopupContainer={(triggerNode: HTMLElement) => triggerNode.parentNode as HTMLElement}
       >
-        {options}
-      </Select>
-    </Popover>
+        <Select
+          {...restProps}
+          ref={selectRef}
+          className={isEnterSpace ? "" : styles.select}
+          dropdownClassName={isEnterSpace ? "" : styles.selectDropdown}
+          placeholder={placeholder || translate(i18n, "MultipleEnterInputSelect.Placeholder")}
+          dropdownStyle={{ zIndex: zIndex! + 10 }}
+          menuItemSelectedIcon={
+            isEnterSpace ? undefined : <Close style={{ color: "#999", fontSize: 12 }} />
+          }
+          mode="multiple"
+          value={curValue as any}
+          defaultActiveFirstOption={false}
+          showArrow={false}
+          filterOption={false}
+          onChange={(v) => handleChange(v)}
+          onMouseEnter={(e: React.MouseEvent<HTMLInputElement>) => {
+            onMouseEnter && onMouseEnter(e);
+            popoverContent && setPopoverVisible(true);
+          }}
+          onMouseLeave={(e: React.MouseEvent<HTMLInputElement>) => {
+            onMouseLeave && onMouseLeave(e);
+            setPopoverVisible(false);
+          }}
+          onFocus={() => {
+            onFocus && onFocus();
+            setPopoverVisible(false);
+          }}
+          onBlur={() => {
+            onBlur && onBlur(curValue as any);
+            setPopoverVisible(false);
+            setIsEnterSpace(false);
+          }}
+          onInputKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+            onInputKeyDown && onInputKeyDown(e);
+            !isEnterSpace && onCurrentInputKeyDown(e);
+          }}
+          onSearch={(value: string) => {
+            if (isSpaceKeyEnable) {
+              setIsEnterSpace(value === " ");
+            }
+          }}
+          notFoundContent={null}
+        >
+          {options}
+        </Select>
+      </Popover>
+    </span>
   );
 };
 
-MultipleEnterInputSelect.defaultProps = {
-  zIndex: zIndexDefault,
-  language: languageDefault,
-  valueType: "string",
-  value: [],
-  isSpaceKeyEnable: false,
-  spaceKeyValue: spaceKeyValueDefault,
-};
-export default MultipleEnterInputSelect;
+// MultipleEnterInputSelect.defaultProps = {
+//   zIndex: zIndexDefault,
+//   language: languageDefault,
+//   valueType: "string",
+//   value: [],
+//   isSpaceKeyEnable: false,
+//   spaceKeyValue: spaceKeyValueDefault,
+// };
+
+export default forwardRef(MultipleEnterInputSelect);
