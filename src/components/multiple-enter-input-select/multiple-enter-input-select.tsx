@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useMemo, useState, useEffect, forwardRef, Ref } from "react";
+import React, { useCallback, useRef, useMemo, useState, useEffect, Ref } from "react";
 import { createUseStyles } from "react-jss";
 import { message, Popover } from "@shuyun-ep-team/kylin-ui";
 import Select, { ISelectProps } from "@shuyun-ep-team/kylin-ui/es/select";
@@ -31,6 +31,7 @@ export interface IProps extends Omit<ISelectProps, "value"> {
   spaceKeyValue?: tSpaceKeyValue;
   /** 外部验证函数 */
   validator?: (values: tValue, value: string | number, callback: (msg?: string) => void) => void;
+  ref?: Ref<any>;
 }
 
 const zIndexDefault = 1000;
@@ -47,7 +48,7 @@ const spaceKeyValueDefault = ["#null#"];
  * import { MultipleEnterInputSelect } from 'kzf-business-components'
  * ~~~
  */
-export const MultipleEnterInputSelect = (props: IProps, ref: Ref<any>) => {
+export const MultipleEnterInputSelect = (props: IProps) => {
   const {
     isSpaceKeyEnable,
     spaceKeyValue,
@@ -62,6 +63,7 @@ export const MultipleEnterInputSelect = (props: IProps, ref: Ref<any>) => {
     onMouseLeave,
     onFocus,
     onBlur,
+    ref,
     ...restProps
   } = props;
   const styles = useStyles();
@@ -230,13 +232,13 @@ export const MultipleEnterInputSelect = (props: IProps, ref: Ref<any>) => {
   );
 };
 
-// MultipleEnterInputSelect.defaultProps = {
-//   zIndex: zIndexDefault,
-//   language: languageDefault,
-//   valueType: "string",
-//   value: [],
-//   isSpaceKeyEnable: false,
-//   spaceKeyValue: spaceKeyValueDefault,
-// };
+MultipleEnterInputSelect.defaultProps = {
+  zIndex: zIndexDefault,
+  language: languageDefault,
+  valueType: "string",
+  value: [],
+  isSpaceKeyEnable: false,
+  spaceKeyValue: spaceKeyValueDefault,
+};
 
-export default forwardRef(MultipleEnterInputSelect);
+export default MultipleEnterInputSelect;
