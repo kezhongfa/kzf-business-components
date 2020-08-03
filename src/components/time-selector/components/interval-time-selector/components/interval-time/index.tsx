@@ -86,5 +86,4 @@ const IntervalTime = (props: IProps) => {
     </div>
   );
 };
-IntervalTime.defaultProps = {};
 export default IntervalTime;

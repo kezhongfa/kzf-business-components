@@ -1,3 +1,4 @@
+import React, { forwardRef } from "react";
 import IntervalTimeSelector from "./interval-time-selector";
 
-export default IntervalTimeSelector;
+export default forwardRef((props, ref) => <IntervalTimeSelector forwardRef={ref} {...props} />);

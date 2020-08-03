@@ -12,7 +12,7 @@ export const selectorWrapper: Styles = {
   display: "inline-block",
   position: "relative",
   cursor: "pointer",
-  padding: "0 12px",
+  padding: "0 22px 0 12px",
   border: "1px solid #D9D9D9",
   borderRadius: "2px",
   backgroundColor: "#fff",

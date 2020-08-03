@@ -7,8 +7,8 @@ import { languageDefault } from "../../constants/language";
 import { isNumeric } from "../../helpers";
 import { translate } from "../../helpers/translate";
 import { TLanguage } from "../../types/language";
-import * as styles from "./index.jss";
 import { getCurLanguage } from "./i18n";
+import * as styles from "./index.jss";
 
 const { Option } = Select;
 const useStyles = createUseStyles(styles);
@@ -31,7 +31,8 @@ export interface IProps extends Omit<ISelectProps, "value"> {
   spaceKeyValue?: tSpaceKeyValue;
   /** 外部验证函数 */
   validator?: (values: tValue, value: string | number, callback: (msg?: string) => void) => void;
-  forwardRef: Ref<any>;
+  /** 内部使用 */
+  forwardRef?: Ref<any>;
 }
 
 const zIndexDefault = 1000;

@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo, useRef, useEffect } from "react";
+import React, { useState, useCallback, useMemo, useRef, useEffect, Ref } from "react";
 import { createUseStyles } from "react-jss";
 import cls from "classnames";
 import { antPrefix } from "@shuyun-ep-team/kylin-ui/es/styles/vars";
@@ -50,6 +50,8 @@ export interface IProps {
     value: TDateTimeSelectValueItem,
     callback: (msg?: string) => void
   ) => void;
+  /** 内部使用 */
+  forwardRef?: Ref<any>;
 }
 
 const minHeightValue = 32;
@@ -75,6 +77,7 @@ export const MultipleDateTimeSelect = (props: IProps) => {
     timeType,
     language,
     validator,
+    forwardRef,
     ...restProps
   } = props;
   const styles = useStyles();
@@ -260,47 +263,49 @@ export const MultipleDateTimeSelect = (props: IProps) => {
   }, [curValue]);
 
   return (
-    <Dropdown
-      overlay={overlay}
-      visible={overlayVisible}
-      onVisibleChange={(v) => {
-        setOverlayVisible(v);
-        onVisibleChange && onVisibleChange(v);
-      }}
-      trigger={trigger}
-      disabled={disabled}
-      getPopupContainer={(triggerNode) => triggerNode}
-    >
-      <Tooltip title={tooltipTitle}>
-        <div {...restProps} style={curStyle}>
-          <div
-            className={cls(`${antPrefix}-select-selection`, styles.selectorWrapper, { disabled })}
-            style={selectorStyle}
-            onClick={onBlankClick}
-          >
-            <div ref={listRef} className={styles.list} onClick={onBlankClick}>
-              {listItems}
-            </div>
-            <div className={styles.operateWrapper}>
-              {moreIconVisible && (
+    <span ref={forwardRef}>
+      <Dropdown
+        overlay={overlay}
+        visible={overlayVisible}
+        onVisibleChange={(v) => {
+          setOverlayVisible(v);
+          onVisibleChange && onVisibleChange(v);
+        }}
+        trigger={trigger}
+        disabled={disabled}
+        getPopupContainer={(triggerNode) => triggerNode}
+      >
+        <Tooltip title={tooltipTitle}>
+          <div {...restProps} style={curStyle}>
+            <div
+              className={cls(`${antPrefix}-select-selection`, styles.selectorWrapper, { disabled })}
+              style={selectorStyle}
+              onClick={onBlankClick}
+            >
+              <div ref={listRef} className={styles.list} onClick={onBlankClick}>
+                {listItems}
+              </div>
+              <div className={styles.operateWrapper}>
+                {moreIconVisible && (
+                  <div
+                    className={cls(`${antPrefix}-select-arrow`, styles.moreIconWrapper)}
+                    onClick={onMoreIconClick}
+                  >
+                    <DragIcon className={styles.moreIcon} />
+                  </div>
+                )}
                 <div
-                  className={cls(`${antPrefix}-select-arrow`, styles.moreIconWrapper)}
-                  onClick={onMoreIconClick}
+                  className={cls(`${antPrefix}-select-arrow`, styles.dateIconWrapper)}
+                  onClick={onDateIconClick}
                 >
-                  <DragIcon className={styles.moreIcon} />
+                  {dateTimeIcon}
                 </div>
-              )}
-              <div
-                className={cls(`${antPrefix}-select-arrow`, styles.dateIconWrapper)}
-                onClick={onDateIconClick}
-              >
-                {dateTimeIcon}
               </div>
             </div>
           </div>
-        </div>
-      </Tooltip>
-    </Dropdown>
+        </Tooltip>
+      </Dropdown>
+    </span>
   );
 };
 

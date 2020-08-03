@@ -20,7 +20,7 @@ export const TestDefault = () => {
   }, []);
   return (
     <IntervalTimeSelector
-      style={{ width: 300 }}
+      style={{ width: 180 }}
       value={value}
       //@ts-ignore
       language={select("language", languageOptions, languageDefault)}
