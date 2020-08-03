@@ -31,7 +31,7 @@ export interface IProps extends Omit<ISelectProps, "value"> {
   spaceKeyValue?: tSpaceKeyValue;
   /** 外部验证函数 */
   validator?: (values: tValue, value: string | number, callback: (msg?: string) => void) => void;
-  ref?: Ref<any>;
+  forwardRef: Ref<any>;
 }
 
 const zIndexDefault = 1000;
@@ -63,7 +63,7 @@ export const MultipleEnterInputSelect = (props: IProps) => {
     onMouseLeave,
     onFocus,
     onBlur,
-    ref,
+    forwardRef,
     ...restProps
   } = props;
   const styles = useStyles();
@@ -175,7 +175,7 @@ export const MultipleEnterInputSelect = (props: IProps) => {
   }, [curValue]);
 
   return (
-    <span ref={ref}>
+    <span ref={forwardRef}>
       <Popover
         content={popoverContent}
         visible={popoverVisible}
