@@ -191,7 +191,7 @@ const FreeIntervalTimeFormItem = (props: IProps) => {
         <span className={styles.suffixText}>{translate(i18n, i18nMap.i18n.BETWEEN)}</span>
       </div>
       {isTimeAccurateText && (
-        <TimeAccurateText {...calculateFreeTimeBetween(maxValue, minValue, unit)} />
+        <TimeAccurateText {...calculateFreeTimeBetween(i18n, maxValue, minValue, unit)} />
       )}
       <OperateBtn disabled={disabled} onOk={_onOk} />
     </>

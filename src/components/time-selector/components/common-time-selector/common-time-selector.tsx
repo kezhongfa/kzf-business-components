@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useMemo } from "react";
+import React, { useState, useCallback, useEffect, useMemo, Ref } from "react";
 import cls from "classnames";
 import { Dropdown, Icon, Popover } from "@shuyun-ep-team/kylin-ui";
 import { antPrefix } from "@shuyun-ep-team/kylin-ui/es/styles/vars";
@@ -30,6 +30,8 @@ export interface IProps {
   value?: ICommonTimeSelectValue;
   onChange?: (v: ICommonTimeSelectValue) => void;
   onVisibleChange?: (visible: boolean) => void;
+  /** 内部使用 */
+  forwardRef?: Ref<any>;
 }
 
 export const CommonTimeSelector = (props: IProps) => {
@@ -42,6 +44,7 @@ export const CommonTimeSelector = (props: IProps) => {
     onChange,
     style = {},
     placeholder = "",
+    forwardRef,
     ...restProps
   } = props;
   const { value, operator, timeSelectType, unit } = props?.value || {};
@@ -143,27 +146,29 @@ export const CommonTimeSelector = (props: IProps) => {
   const showText = getShowText();
 
   return (
-    <Dropdown
-      overlay={overlay}
-      visible={visible}
-      trigger={trigger}
-      onVisibleChange={handleVisibleChange}
-      disabled={disabled}
-      getPopupContainer={(triggerNode) => triggerNode}
-    >
-      <div className={cls(styles.selectorWrapper, { disabled })} {...restProps} style={style}>
-        <div className={styles.select}>
-          {showText ? (
-            <Popover content={showText}>
-              <span className={styles.showName}>{showText}</span>
-            </Popover>
-          ) : (
-            <span className={styles.placeHolder}>{placeholder}</span>
-          )}
-          <Icon className={`${antPrefix}-select-arrow`} type="down" />
+    <span ref={forwardRef}>
+      <Dropdown
+        overlay={overlay}
+        visible={visible}
+        trigger={trigger}
+        onVisibleChange={handleVisibleChange}
+        disabled={disabled}
+        getPopupContainer={(triggerNode) => triggerNode}
+      >
+        <div className={cls(styles.selectorWrapper, { disabled })} {...restProps} style={style}>
+          <div className={styles.select}>
+            {showText ? (
+              <Popover content={showText}>
+                <span className={styles.showName}>{showText}</span>
+              </Popover>
+            ) : (
+              <span className={styles.placeHolder}>{placeholder}</span>
+            )}
+            <Icon className={`${antPrefix}-select-arrow`} type="down" />
+          </div>
         </div>
-      </div>
-    </Dropdown>
+      </Dropdown>
+    </span>
   );
 };
 
