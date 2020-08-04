@@ -34,11 +34,11 @@ export const DateTimePicker = (props: IProps) => {
     setTimeValue(time);
   }, []);
 
-  const handleTimeClose = () => {
+  const handleTimeClose = useCallback(() => {
     if (timeValue) {
       onOk && onOk(timeValue);
     }
-  };
+  }, [onOk, timeValue]);
 
   const timeAddon = useCallback(
     () => (
@@ -53,7 +53,7 @@ export const DateTimePicker = (props: IProps) => {
         </Button>
       </div>
     ),
-    [timeValue, i18n]
+    [timeValue, i18n, handleTimeClose]
   );
 
   const onChange = useCallback(

@@ -50,7 +50,6 @@ export const IntervalTimeSelector = (props: IProps) => {
   } = props;
   const { value, operator = operatorJson.GE_LE } = props?.value || {};
   const styles = useStyles();
-  const [popoverVisible, setPopoverVisible] = useState(false);
   const [i18nMap, setI18nMap] = useState({});
   const [visible, setVisible] = useState(false);
 
@@ -63,7 +62,6 @@ export const IntervalTimeSelector = (props: IProps) => {
   const handleVisibleChange = useCallback(
     (v: boolean) => {
       setVisible(v);
-      setPopoverVisible(false);
       onVisibleChange && onVisibleChange(v);
     },
     [onVisibleChange]
@@ -102,45 +100,34 @@ export const IntervalTimeSelector = (props: IProps) => {
         )}
       </>
     ),
-    [visible, props?.value]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [visible, props?.value, i18nMap, onOk]
   );
 
   const showText = getShowText();
   return (
-    <span
-      ref={forwardRef}
-      onMouseEnter={() => {
-        showText && setPopoverVisible(true);
-      }}
-      onMouseLeave={() => {
-        setPopoverVisible(false);
-      }}
-    >
-      <Popover
-        content={showText}
-        visible={popoverVisible}
-        getPopupContainer={(triggerNode: HTMLElement) => triggerNode.parentNode as HTMLElement}
+    <span ref={forwardRef}>
+      <Dropdown
+        overlay={overlay}
+        visible={visible}
+        trigger={trigger}
+        onVisibleChange={handleVisibleChange}
+        disabled={disabled}
+        getPopupContainer={(triggerNode) => triggerNode}
       >
-        <Dropdown
-          overlay={overlay}
-          visible={visible}
-          trigger={trigger}
-          onVisibleChange={handleVisibleChange}
-          disabled={disabled}
-          getPopupContainer={(triggerNode) => triggerNode}
-        >
-          <div className={cls(styles.selectorWrapper, { disabled })} {...restProps} style={style}>
-            <div className={styles.select}>
-              {showText ? (
+        <div className={cls(styles.selectorWrapper, { disabled })} {...restProps} style={style}>
+          <div className={styles.select}>
+            {showText ? (
+              <Popover content={showText}>
                 <span className={styles.showName}>{showText}</span>
-              ) : (
-                <span className={styles.placeHolder}>{placeholder}</span>
-              )}
-              <Icon className={`${antPrefix}-select-arrow`} type="down" />
-            </div>
+              </Popover>
+            ) : (
+              <span className={styles.placeHolder}>{placeholder}</span>
+            )}
+            <Icon className={`${antPrefix}-select-arrow`} type="down" />
           </div>
-        </Dropdown>
-      </Popover>
+        </div>
+      </Dropdown>
     </span>
   );
 };

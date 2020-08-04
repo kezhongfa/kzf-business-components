@@ -54,13 +54,13 @@ const IntervalTime = (props: IProps) => {
 
   const validate = useCallback(() => {
     return intervalTimePickerRef.current?.validate();
-  }, [intervalTimePickerRef.current]);
+  }, []);
 
   const onOperateClick = useCallback(() => {
     if (validate()) {
       onOk && onOk(curValue);
     }
-  }, [curValue]);
+  }, [curValue, onOk, validate]);
 
   useEffect(() => {
     if (isDirty) {
@@ -68,7 +68,7 @@ const IntervalTime = (props: IProps) => {
     } else {
       setIsDirty(true);
     }
-  }, [curValue]);
+  }, [curValue, isDirty, validate]);
 
   return (
     <div className={styles.wrapper}>

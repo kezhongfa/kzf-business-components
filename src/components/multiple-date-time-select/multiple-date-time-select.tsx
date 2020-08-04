@@ -99,16 +99,13 @@ export const MultipleDateTimeSelect = (props: IProps) => {
     return (timeType || timeTypeDefault) as TDateTimeSelectType;
   }, [timeType]);
 
-  const getListClientHeight = useCallback(
-    function () {
-      return new Promise<number>((resolve) => {
-        setTimeout(() => {
-          resolve(listRef.current?.clientHeight);
-        }, 100);
-      });
-    },
-    [curValue]
-  );
+  const getListClientHeight = useCallback(() => {
+    return new Promise<number>((resolve) => {
+      setTimeout(() => {
+        resolve(listRef.current?.clientHeight);
+      }, 100);
+    });
+  }, []);
 
   useEffect(() => {
     getListClientHeight().then((res) => {
@@ -125,7 +122,7 @@ export const MultipleDateTimeSelect = (props: IProps) => {
         }
       }
     });
-  }, [curValue, isOpenDateChoose]);
+  }, [curValue, isOpenDateChoose, getListClientHeight]);
 
   const handleTimeSelectOk = useCallback(
     (value) => {
@@ -149,7 +146,7 @@ export const MultipleDateTimeSelect = (props: IProps) => {
         }
       }
     },
-    [curValue, validator, onChange]
+    [curValue, validator, onChange, onVisibleChange]
   );
 
   const overlay = useMemo(() => {
@@ -159,7 +156,7 @@ export const MultipleDateTimeSelect = (props: IProps) => {
       // eslint-disable-next-line react/jsx-no-useless-fragment
       <></>
     );
-  }, [overlayVisible, language]);
+  }, [overlayVisible, language, curTimeType, handleTimeSelectOk]);
 
   const onCloseIconClick = useCallback(
     (index) => (e: any) => {
@@ -168,7 +165,7 @@ export const MultipleDateTimeSelect = (props: IProps) => {
       result.splice(index, 1);
       onChange && onChange(result);
     },
-    [curValue]
+    [curValue, onChange]
   );
 
   const formatDateTimeFn = useCallback(
@@ -198,7 +195,7 @@ export const MultipleDateTimeSelect = (props: IProps) => {
       result = <DTTimeIcon className={styles.dateIcon} />;
     }
     return result;
-  }, [curTimeType]);
+  }, [curTimeType, styles.dateIcon]);
 
   const onListItemClick = useCallback((e) => {
     e.stopPropagation();
@@ -222,7 +219,8 @@ export const MultipleDateTimeSelect = (props: IProps) => {
       },
       []
     );
-  }, [curValue, onListItemClick]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [curValue, onListItemClick, onCloseIconClick, formatDateTimeFn]);
 
   const onMoreIconClick = useCallback((e) => {
     e.stopPropagation();
@@ -251,7 +249,7 @@ export const MultipleDateTimeSelect = (props: IProps) => {
         setIsOpenDateChoose((v) => !v);
       }
     },
-    [isOpenDateChoose]
+    [isOpenDateChoose, getListClientHeight]
   );
 
   const tooltipTitle = useMemo(() => {
@@ -260,7 +258,7 @@ export const MultipleDateTimeSelect = (props: IProps) => {
         return [...pre, formatDateTimeFn(cur)];
       }, [])
       .join("、");
-  }, [curValue]);
+  }, [curValue, formatDateTimeFn]);
 
   return (
     <span ref={forwardRef}>

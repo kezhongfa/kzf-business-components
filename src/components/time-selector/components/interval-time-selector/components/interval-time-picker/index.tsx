@@ -79,7 +79,7 @@ export const IntervalTimePicker = (props: IProps, ref: any) => {
     }
 
     return result;
-  }, [value, operator]);
+  }, [value, operator, i18n]);
 
   const validateOperate = useCallback(() => {
     let result = {
@@ -100,7 +100,7 @@ export const IntervalTimePicker = (props: IProps, ref: any) => {
       };
     }
     return result;
-  }, [operator]);
+  }, [operator, i18n]);
 
   const validateEndTime = useCallback(() => {
     let result = {
@@ -145,7 +145,7 @@ export const IntervalTimePicker = (props: IProps, ref: any) => {
       }
     }
     return result;
-  }, [value, operator]);
+  }, [value, operator, i18n]);
 
   // 验证
   const validate = useCallback(() => {
