@@ -1,1 +1,1 @@
-# 麒麟通用和业务组件「kzf-business-components」
+# 通用和业务组件「kzf-business-components」

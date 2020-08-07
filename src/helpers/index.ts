@@ -24,6 +24,27 @@ export function isEmptyValue(value: any, deep = true) {
   );
 }
 
+export function isEmptyValueExcludeStr(v: any, deep = true) {
+  return (
+    v === undefined ||
+    v === null ||
+    (Array.isArray(v) && !v.length) ||
+    (isObject(v) && isEmptyObjectExcludeStr(v, deep))
+  );
+}
+
+export function isEmptyObjectExcludeStr(object: any, deep = false): boolean {
+  if (!isObject(object)) {
+    return false;
+  }
+
+  if (!deep && !Object.keys(object).length) {
+    return true;
+  }
+
+  return !Object.values(object).some((v) => !isEmptyValueExcludeStr(v, deep));
+}
+
 export function isEmptyObject(object: any, deep = false): boolean {
   if (!isObject(object)) {
     return false;
@@ -34,6 +55,15 @@ export function isEmptyObject(object: any, deep = false): boolean {
   }
 
   return !Object.values(object).some((v) => !isEmptyValue(v, deep));
+}
+
+export function omitObjectEmptyValueExcludeStr(obj: any): any {
+  const o = isObject(obj) ? obj : {};
+  return Object.fromEntries(
+    Object.entries(o)
+      .filter(([, v]) => !isEmptyValueExcludeStr(v, false))
+      .map(([k, v]) => (isObject(v) ? [k, omitObjectEmptyValueExcludeStr(v)] : [k, v]))
+  );
 }
 
 export function omitObjectEmptyValue(obj: any): any {

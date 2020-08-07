@@ -184,7 +184,7 @@ const FreeIntervalTimeFormItem = (props: IProps) => {
           />
         </Form.Item>
         <TimeUnitSelect
-          style={{ width: "105px", marginLeft: 8 }}
+          style={{ width: "105px", margin: "3px 0 0 8px" }}
           value={unit}
           onChange={_onUnitChange}
         />

@@ -27,9 +27,8 @@
     "prestart": "npm run check-nodeJs-version && npm run checkDependencies",
     "start": "react-scripts start",
     "build:test": "cross-env CI=true react-scripts test --passWithNoTests",
-    "build:debug": "node scripts/debug-info.js",
     "build:ts": "tsc -p tsconfig.build.json",
-    "build": "npm run build:test && npm run clean && npm run codecheck && npm run build:ts && npm run build:debug",
+    "build": "npm run build:test && npm run clean && npm run codecheck && npm run build:ts",
     "prettier": "npx prettier --write src/**/*"
   },
   "husky": {
