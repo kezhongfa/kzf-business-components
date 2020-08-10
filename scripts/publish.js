@@ -12,12 +12,11 @@ if (version) {
   const execCommonTask = () => {
     shell.cp("package.json", "dist");
     shell.cp("README.md", "dist");
-    return Promise.resolve();
   };
   const execNpmConfigTask = () => execAsync("npm config get registry", "execNpmConfigTask");
   const execPublishTask = () =>
     execAsync(`npm publish --access=public dist --tag ${tag}`, "npmRegistry");
-  const execSyncTaobaoTask = () =>
+  const execSyncTaoBaoTask = () =>
     execAsync(
       "curl -X PUT https://npm.taobao.org/sync/kzf-business-components",
       "execSyncTaobaoTask"
@@ -29,7 +28,7 @@ if (version) {
     .then(execCommonTask)
     .then(execNpmConfigTask)
     .then(execPublishTask)
-    .then(execSyncTaobaoTask)
+    .then(execSyncTaoBaoTask)
     .then(execPushTagTask)
     .then(() => {
       console.log("发布成功".green);
