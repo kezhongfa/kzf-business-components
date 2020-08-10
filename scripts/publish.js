@@ -4,8 +4,9 @@ const argv = require("./argv");
 
 const { version, tag = "latest" } = argv;
 
+const execAsyncEndTasks = [];
+
 if (version) {
-  const execAsyncEndTasks = [];
   const execBuildTask = () => execAsync("npm run build", "execBuildTask");
   const execVersionTask = () =>
     execAsync(`npm version ${version} -m "chore: version %s"`, "execVersionTask");
