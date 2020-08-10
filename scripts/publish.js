@@ -33,7 +33,6 @@ if (version) {
     .then(execPushTagTask)
     .then(() => {
       console.log("发布成功".green);
-      process.exit(0);
     })
     .finally(() => {
       if (execAsyncEndTasks.length > 0) {
