@@ -57,7 +57,7 @@ function execAsync(command, execLog) {
       console.log(`${execLog} stdout ${data}`.yellow);
       if (execLog === "execNpmConfigTask" && !data.includes("registry.npmjs.org")) {
         shell.exec("npm config set registry=https://registry.npmjs.org");
-        execAsyncTaskEnd.push(() =>
+        execAsyncEndTasks.push(() =>
           shell.exec("npm config set registry=http://registry.npm.taobao.org")
         );
       }
