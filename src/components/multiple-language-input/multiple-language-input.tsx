@@ -110,6 +110,7 @@ export const MultipleLanguageInput = (props: IProps) => {
         })}
       </Menu>
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isMenuVisible, _allLanguages, disabled]);
 
   const onModalOk = useCallback(() => {
@@ -134,7 +135,7 @@ export const MultipleLanguageInput = (props: IProps) => {
 
   const suffixIcon = useMemo(
     () => (
-      <Dropdown overlay={languageMenu}>
+      <Dropdown overlay={languageMenu} placement="bottomCenter">
         <span
           onMouseEnter={() => {
             setMenuVisible(true);
@@ -148,7 +149,8 @@ export const MultipleLanguageInput = (props: IProps) => {
         </span>
       </Dropdown>
     ),
-    []
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [languageMenu]
   );
 
   const getMultipleInput = () => {
@@ -158,7 +160,9 @@ export const MultipleLanguageInput = (props: IProps) => {
       return (
         <div className={styles.multipleInput}>
           <TextArea disabled={disabled} {...restProps} style={{ ...style, paddingRight: 30 }} />
-          <span style={{ position: "absolute", right: 11, top: 8 }}>{suffixIcon}</span>
+          <span style={{ position: "absolute", right: 11, top: 8, lineHeight: 1 }}>
+            {suffixIcon}
+          </span>
         </div>
       );
     }
