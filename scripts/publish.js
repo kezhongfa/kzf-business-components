@@ -3,7 +3,6 @@ const colors = require("colors");
 const fs = require("fs");
 const path = require("path");
 const argv = require("./argv");
-const packageJson = require("../package.json");
 
 const { version, tag = "latest" } = argv;
 
@@ -16,6 +15,7 @@ if (version) {
   const execVersionTask = () =>
     execAsync(`npm version ${version} -m "chore: version %s"`, "execVersionTask");
   const execPackageJsonTask = () => {
+    const packageJson = require("../package.json");
     const pkg = JSON.parse(JSON.stringify(packageJson));
     Reflect.deleteProperty(pkg, "devDependencies");
     Reflect.deleteProperty(pkg, "husky");
