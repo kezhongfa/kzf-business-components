@@ -1,17 +1,33 @@
 const shell = require("shelljs");
 const colors = require("colors");
+const fs = require("fs");
+const path = require("path");
 const argv = require("./argv");
+const packageJson = require("../package.json");
 
 const { version, tag = "latest" } = argv;
 
+const appDirectory = fs.realpathSync(process.cwd());
+const resolveApp = (relativePath) => path.resolve(appDirectory, relativePath);
 const execAsyncEndTasks = [];
 
 if (version) {
   const execBuildTask = () => execAsync("npm run build", "execBuildTask");
   const execVersionTask = () =>
     execAsync(`npm version ${version} -m "chore: version %s"`, "execVersionTask");
-  const execCommonTask = () => {
-    shell.cp("package.json", "dist");
+  const execPackageJsonTask = () => {
+    const pkg = JSON.parse(JSON.stringify(packageJson));
+    Reflect.deleteProperty(pkg, "devDependencies");
+    Reflect.deleteProperty(pkg, "husky");
+    Reflect.deleteProperty(pkg, "scripts");
+    Reflect.deleteProperty(pkg, "lint-staged");
+    Reflect.deleteProperty(pkg, "scripts");
+    const distPath = resolveApp("dist");
+    fs.writeFileSync(`${distPath}/package.json`, JSON.stringify(pkg, null, 2), {
+      encoding: "utf-8",
+    });
+  };
+  const execCopyTask = () => {
     shell.cp("README.md", "dist");
   };
   const execNpmConfigTask = () => execAsync("npm config get registry", "execNpmConfigTask");
@@ -25,7 +41,8 @@ if (version) {
   const execPushTagTask = () => execAsync("git push --follow-tags", "execPushTagTask");
   execBuildTask()
     .then(execVersionTask)
-    .then(execCommonTask)
+    .then(execPackageJsonTask)
+    .then(execCopyTask)
     .then(execNpmConfigTask)
     .then(execPublishTask)
     .then(execSyncTaoBaoTask)
@@ -45,7 +62,7 @@ if (version) {
       process.exit(1);
     });
 } else {
-  console.error(colors.red("你未指定version参数"));
+  console.error(colors.red("未指定version参数"));
 }
 
 function execAsync(command, execLog) {
