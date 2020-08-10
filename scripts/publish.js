@@ -20,10 +20,9 @@ if (version) {
   const execSyncTaoBaoTask = () =>
     execAsync(
       "curl -X PUT https://npm.taobao.org/sync/kzf-business-components",
-      "execSyncTaobaoTask"
+      "execSyncTaoBaoTask"
     );
   const execPushTagTask = () => execAsync("git push --follow-tags", "execPushTagTask");
-
   execBuildTask()
     .then(execVersionTask)
     .then(execCommonTask)
@@ -55,11 +54,9 @@ function execAsync(command, execLog) {
     console.log(`${execLog} start`.green);
     child.stdout.on("data", function (data) {
       console.log(`${execLog} stdout ${data}`.yellow);
-      if (execLog === "execNpmConfigTask" && !data.includes("registry.npmjs.org")) {
-        shell.exec("npm config set registry=https://registry.npmjs.org");
-        execAsyncEndTasks.push(() =>
-          shell.exec("npm config set registry=http://registry.npm.taobao.org")
-        );
+      if (execLog === "execNpmConfigTask" && !data.includes("registry.npmjs.org/")) {
+        shell.exec("npm config set registry=https://registry.npmjs.org/");
+        execAsyncEndTasks.push(() => shell.exec(`npm config set registry=${data}`));
       }
     });
     child.on("close", function (code) {
