@@ -1,4 +1,4 @@
-import React, { Ref, useState, useEffect, useMemo, useCallback, useRef } from "react";
+import React, { useState, useEffect, useMemo, useCallback, useRef, forwardRef, Ref } from "react";
 import { createUseStyles } from "react-jss";
 import { Icon, Menu, Dropdown } from "@shuyun-ep-team/kylin-ui";
 import update from "immutability-helper";
@@ -43,8 +43,6 @@ export interface IProps extends TProps {
   allLanguages?: ILanguages;
   /* 录入结果 */
   onOk?: (allLanguages: ILanguages, values: Record<string, string>) => void;
-  /** 内部使用 */
-  forwardRef?: Ref<any>;
 }
 
 const allLanguagesDefault: ILanguages = {
@@ -54,9 +52,8 @@ const allLanguagesDefault: ILanguages = {
   },
 };
 
-export const MultipleLanguageInput = (props: IProps) => {
+export const MultipleLanguageInput = (props: IProps, ref: Ref<any>) => {
   const {
-    forwardRef,
     componentType = "singleLine",
     language = languageDefault,
     defaultLanguage = languageDefault,
@@ -171,7 +168,7 @@ export const MultipleLanguageInput = (props: IProps) => {
 
   return (
     <>
-      <span ref={forwardRef}>{getMultipleInput()}</span>
+      <span ref={ref}>{getMultipleInput()}</span>
       <CustomModal
         title={modalTitle}
         visible={modalVisible}
@@ -191,9 +188,9 @@ export const MultipleLanguageInput = (props: IProps) => {
   );
 };
 
-MultipleLanguageInput.defaultProps = {
-  language: languageDefault,
-  defaultLanguage: languageDefault,
-};
+// MultipleLanguageInput.defaultProps = {
+//   language: languageDefault,
+//   defaultLanguage: languageDefault,
+// };
 
-export default MultipleLanguageInput;
+export default forwardRef(MultipleLanguageInput);
