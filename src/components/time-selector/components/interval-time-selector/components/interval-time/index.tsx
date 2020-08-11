@@ -1,5 +1,3 @@
-/* eslint-disable function-paren-newline */
-/* eslint-disable implicit-arrow-linebreak */
 import React, { useState, useCallback, useRef, useEffect } from "react";
 import { Form } from "@shuyun-ep-team/kylin-ui";
 import { createUseStyles } from "react-jss";

@@ -1,4 +1,3 @@
-/* eslint-disable indent */
 import moment from "moment";
 import { DateFormats } from "@shuyun-ep-team/utils/es/date";
 import { isNumeric } from "../../../helpers";

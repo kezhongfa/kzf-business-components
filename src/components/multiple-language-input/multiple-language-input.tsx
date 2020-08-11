@@ -87,7 +87,6 @@ export const MultipleLanguageInput = (props: IProps, ref: Ref<any>) => {
 
   const languageMenu = useMemo(() => {
     return disabled ? (
-      // eslint-disable-next-line react/jsx-no-useless-fragment
       <></>
     ) : (
       <Menu>

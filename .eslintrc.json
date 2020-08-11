@@ -18,6 +18,10 @@
     "project": "./tsconfig.json"
   },
   "rules": {
-    "import/no-named-as-default": "off"
+    "import/no-named-as-default": "off",
+    "react/jsx-no-useless-fragment": "off",
+    "indent": ["error", 2, { "MemberExpression": "off" }],
+    "implicit-arrow-linebreak": "off",
+    "function-paren-newline": "off"
   }
 }

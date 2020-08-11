@@ -6,7 +6,6 @@
   "editor.formatOnSave": true,
   "editor.fontSize": 14,
   "files.encoding": "utf8",
-  "files.autoSave": "onFocusChange",
   "files.exclude": {
     "**/.git": true,
     "**/.svn": true,
