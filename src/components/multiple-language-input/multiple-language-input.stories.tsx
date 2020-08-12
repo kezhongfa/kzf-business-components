@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { withKnobs, select } from "@storybook/addon-knobs";
 import MultipleLanguageInput from "./multiple-language-input";
 import { commonStoryWrapper } from "../../helpers/story";
@@ -22,7 +22,7 @@ export const TestDefault = () => {
     },
     "zh-CN": {
       label: "中文",
-      value: "中文",
+      value: "",
     },
   }));
   const onChange = useCallback((e) => {

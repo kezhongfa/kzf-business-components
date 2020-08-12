@@ -10,7 +10,8 @@ import FormLanguage from "./form-language";
 import { TLanguage } from "../../types/language";
 import { languageDefault } from "../../constants/language";
 import { translate } from "../../helpers/translate";
-import { getCurLanguage } from "./i18n";
+import zhCN from "./i18n/zh-CN.json";
+import { fetchKylinBusinessComponentLanguagePackage } from "../../services/language/fetch";
 import { TValidationRule } from "../../types/form";
 import { RootI18nContext } from "../../contexts";
 import * as styles from "./index.jss";
@@ -72,10 +73,15 @@ export const MultipleLanguageInput = (props: IProps, ref: Ref<any>) => {
   const [modalTitle, setModalTitle] = useState("");
 
   useEffect(() => {
-    getCurLanguage(language).then((res) => {
-      setI18n(res);
-      setModalTitle(translate(res, "MultipleLanguageInput.ModalTitle"));
-    });
+    fetchKylinBusinessComponentLanguagePackage("multiple-language-input", language)
+      .then((res) => {
+        setI18n(res);
+        setModalTitle(translate(res, "MultipleLanguageInput.ModalTitle"));
+      })
+      .catch(() => {
+        setI18n(zhCN);
+        setModalTitle(translate(zhCN, "MultipleLanguageInput.ModalTitle"));
+      });
   }, [language]);
 
   const _allLanguages = useMemo(() => {
